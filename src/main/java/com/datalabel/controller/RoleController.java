@@ -2,10 +2,11 @@ package com.datalabel.controller;
 
 import com.datalabel.common.Result;
 import com.datalabel.entity.Role;
-import com.datalabel.service.RoleService;
+import com.datalabel.logicservice.RoleLogicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -13,35 +14,25 @@ import java.util.List;
 public class RoleController {
     
     @Autowired
-    private RoleService roleService;
+    private RoleLogicService roleLogicService;
     
     @GetMapping("/list")
-    public Result<List<Role>> list() {
-        return Result.success(roleService.findAll());
+    public Result<List<Role>> list(HttpServletRequest request) {
+        return roleLogicService.list(request);
     }
     
     @GetMapping("/{id}")
-    public Result<Role> getById(@PathVariable Long id) {
-        Role role = roleService.findById(id);
-        if (role == null) {
-            return Result.error("角色不存在");
-        }
-        return Result.success(role);
+    public Result<Role> getById(@PathVariable Long id, HttpServletRequest request) {
+        return roleLogicService.getById(id, request);
     }
     
     @PostMapping("/save")
-    public Result<String> save(@RequestBody Role role) {
-        if (roleService.save(role)) {
-            return Result.success("保存成功", null);
-        }
-        return Result.error("保存失败");
+    public Result<String> save(@RequestBody Role role, HttpServletRequest request) {
+        return roleLogicService.save(role, request);
     }
     
     @DeleteMapping("/{id}")
-    public Result<String> delete(@PathVariable Long id) {
-        if (roleService.deleteById(id)) {
-            return Result.success("删除成功", null);
-        }
-        return Result.error("删除失败");
+    public Result<String> delete(@PathVariable Long id, HttpServletRequest request) {
+        return roleLogicService.delete(id, request);
     }
 }
