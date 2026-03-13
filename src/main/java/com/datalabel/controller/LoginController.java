@@ -2,7 +2,7 @@ package com.datalabel.controller;
 
 import com.datalabel.common.Result;
 import com.datalabel.entity.User;
-import com.datalabel.service.UserService;
+import com.datalabel.logicService.UserLogicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     
     @Autowired
-    private UserService userService;
+    private UserLogicService userLogicService;
     
     @GetMapping("/")
     public String index() {
@@ -31,15 +31,7 @@ public class LoginController {
                               @RequestParam String password,
                               @RequestParam Integer userType,
                               HttpSession session) {
-        User user = userService.login(username, password);
-        if (user == null) {
-            return Result.error("用户名或密码错误");
-        }
-        if (!user.getUserType().equals(userType)) {
-            return Result.error("登录类型不匹配");
-        }
-        session.setAttribute("currentUser", user);
-        return Result.success("登录成功", user);
+        return userLogicService.login(username, password, userType, session);
     }
     
     @GetMapping("/logout")
