@@ -2,7 +2,7 @@ package com.datalabel.controller;
 
 import com.datalabel.common.Result;
 import com.datalabel.entity.Role;
-import com.datalabel.service.RoleService;
+import com.datalabel.logicService.RoleLogicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,35 +13,25 @@ import java.util.List;
 public class RoleController {
     
     @Autowired
-    private RoleService roleService;
+    private RoleLogicService roleLogicService;
     
     @GetMapping("/list")
     public Result<List<Role>> list() {
-        return Result.success(roleService.findAll());
+        return roleLogicService.list();
     }
     
     @GetMapping("/{id}")
     public Result<Role> getById(@PathVariable Long id) {
-        Role role = roleService.findById(id);
-        if (role == null) {
-            return Result.error("角色不存在");
-        }
-        return Result.success(role);
+        return roleLogicService.getById(id);
     }
     
     @PostMapping("/save")
     public Result<String> save(@RequestBody Role role) {
-        if (roleService.save(role)) {
-            return Result.success("保存成功", null);
-        }
-        return Result.error("保存失败");
+        return roleLogicService.save(role);
     }
     
     @DeleteMapping("/{id}")
     public Result<String> delete(@PathVariable Long id) {
-        if (roleService.deleteById(id)) {
-            return Result.success("删除成功", null);
-        }
-        return Result.error("删除失败");
+        return roleLogicService.delete(id);
     }
 }
