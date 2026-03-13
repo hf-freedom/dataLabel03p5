@@ -1,6 +1,10 @@
 package com.datalabel.util;
 
 public class OperationType {
+    public static final String LOGIN = "用户登录";
+    public static final String LOGOUT = "用户登出";
+    public static final String GET_CURRENT_USER = "获取当前用户";
+    
     public static final String USER_LIST = "用户列表查询";
     public static final String USER_GET = "用户详情查询";
     public static final String USER_SAVE = "用户保存";
